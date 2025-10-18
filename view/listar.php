@@ -1,4 +1,3 @@
-<?php if (count($dataToView["data"]) > 0): ?>
 	<table class="table">
 		<thead class="table-dark">
 			<tr>
@@ -21,8 +20,7 @@
 							echo "<td>";
 							if ($key == "id_cliente") {
 								echo "(" . $tabla[$key] . ") " . $tabla["apellido"] . ", " . $tabla["nombre"];
-							}
-							else if ($key == "id_producto") {
+							} else if ($key == "id_producto") {
 								echo "(" . $tabla[$key] . ") " . $tabla["nombre"];
 							} else {
 								echo $tabla[$key];
@@ -43,8 +41,8 @@
 			<?php endforeach; ?>
 		</tbody>
 	</table>
-<?php else: ?>
-	<div class="alert alert-info">
-		Actualmente no existen <?= $_GET["controller"] ?>s.
-	</div>
-<?php endif; ?>
+	<?php if (count($dataToView["data"]) == 0): ?>
+		<div class="alert alert-info">
+			Actualmente no existen <?= $_GET["controller"] ?>s.
+		</div>
+	<?php endif; ?>

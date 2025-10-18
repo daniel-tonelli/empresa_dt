@@ -11,7 +11,7 @@ class VentaDetalle {
 	public function __construct() {
 		$this->campos = [
 			"id" => "ID",
-			"id_venta" => "Venta",
+			"id_venta" => "",
 			"id_producto" => "Producto",
 			"cantidad" => "Cantidad",
 			"precio_unitario" => "Precio ($)",
@@ -26,13 +26,13 @@ class VentaDetalle {
 	}
 
 	/* Get all */
-	public function getTabla(){
+	public function getTabla($id){
 		$this->getConection();
 		$sql = "SELECT a.*, b.nombre, b.precio 
 			FROM ".$this->tabla." a
 			INNER JOIN productos b
 			ON a.id_producto=b.id
-		";
+			WHERE id_venta=".$id;
 		$stmt = $this->conection->prepare($sql);
 		$stmt->execute();
 		$resultado = $stmt->get_result();
@@ -110,17 +110,44 @@ class VentaDetalle {
 			$stmt->execute($data);
 			$id = $this->conection->insert_id;
 		}
-
+		$this->updateTotalVentaById($id_venta);
 		return $id;	
-
 	}
 
 	/* Delete by id */
-	public function deleteTablaById($id){
+	public function deleteTablaById($id)
+	{
 		$this->getConection();
-		$sql = "DELETE FROM ".$this->tabla. " WHERE id = ?";
+		$id_venta= $this->getIdVentaById($id);
+		$sql = "DELETE FROM " . $this->tabla . " WHERE id = ?";
 		$stmt = $this->conection->prepare($sql);
-		return $stmt->execute([$id]);
+		$stmt->execute([$id]);
+		$this->updateTotalVentaById($id_venta);
+		return true;
+	}
+
+	/* Actualizar Total de Venta x id_venta */
+	public function updateTotalVentaById($id_venta) {
+		$this->getConection();
+		$sql  = "UPDATE ventas SET total = (
+		select sum(subtotal) from ventas_detalle 
+		where ventas.id=ventas_detalle.id_venta)
+		where id=?";
+		$stmt = $this->conection->prepare($sql);
+		$stmt->bind_param('i', $id_venta); // 'i' para entero
+		$stmt->execute();
+		return true;
+	}
+
+	public function getIdVentaById($id)	{
+		if (is_null($id)) return false;
+		$this->getConection();
+		$sql = "SELECT id_venta FROM " . $this->tabla . " WHERE id = ?";
+		$stmt = $this->conection->prepare($sql);
+		$stmt->bind_param('i', $id); // 'i' para entero
+		$stmt->execute();
+		$resultado = $stmt->get_result();
+		return $resultado->fetch_assoc();
 	}
 
 	public function getCampos(){

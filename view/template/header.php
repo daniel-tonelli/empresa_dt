@@ -20,7 +20,7 @@
                             <?php if ($_GET["action"] == "list") { ?>
                                 <a href="index.php?controller=<?= $_GET["controller"] ?>&action=edit"
                                     class="btn btn-outline-primary">➕Crear <?= $_GET["controller"] ?></a>
-                            <?php } else {
+                            <?php } else if ($_GET["controller"] !== "venta_detalle") {
                             ?> <a href="index.php?controller=<?= $_GET["controller"] ?>&action=list"
                                     class="btn btn-outline-primary">volver</a>
                                 <?php

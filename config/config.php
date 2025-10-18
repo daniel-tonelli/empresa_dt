@@ -6,5 +6,5 @@ define("DB_PASS", "");
 
 define("DEFAULT_CONTROLLER", "cliente");
 define("DEFAULT_ACTION", "list");
-$controllers=["cliente","producto","venta","venta_detalle"];
+$controllers=["cliente","producto","venta"];
 ?>

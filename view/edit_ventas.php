@@ -4,7 +4,7 @@ foreach ($campos as $key => $encabezado) {
 	if (isset($dataToView["data"][$key])) $$key = $dataToView["data"][$key];
 }
 ?>
-<div class="form-control">
+<div class="form-control-dark">
 	<?php
 	if (isset($_GET["response"]) and $_GET["response"] === true) {
 	?>
@@ -13,30 +13,62 @@ foreach ($campos as $key => $encabezado) {
 		</div>
 	<?php
 	}
+	$id_venta = $id;
 	?>
-
-	<form class="form" action="index.php?controller=<?= $_GET["controller"] ?>&action=save" method="POST">
-		<?php
-
-		foreach ($campos as $key => $encabezado) {
-			if ($key == "id_cliente") {
-		?> <div class="form-group">
-					<label class="fw-bold"><?= $encabezado ?></label>
-					<select name="<?= $key ?>" id="<?= $key ?>" required>
-						<?php foreach ($dataToView["dataRel1"] as $rel1) { ?>
-							<option value="<?= $rel1["id"] ?>" <?= $rel1["id"]==$$key?"selected":"" ?>>
-								<?= $rel1["apellido"] ?>, <?= $rel1["nombre"] ?>
-							</option>
-						<?php } ?>
-					</select>
-				</div>
-			<?php
-			} else {
-			?><input type="hidden" name="<?= $key ?>" value="<?= $$key ?>" /><?php
-		}
-	}
-			?> <p></p>
-		<input type="submit" value="Guardar" class="btn btn-primary" />
-		<a class="btn btn-primary" href="index.php?controller=<?= $_GET["controller"] ?>&action=list">Cancelar</a>
-	</form>
+	<fieldset>
+		<form class="form" action="index.php?controller=<?= $_GET["controller"] ?>&action=save" method="POST">
+			<div class="row align-items-center">
+				<?php
+				foreach ($campos as $key => $encabezado) {
+					if ($key == "id_cliente") {
+				?><div class="col-md-3 mb-2">
+							<label class="form-label"><?= $encabezado ?></label>
+							<select name="<?= $key ?>" id="<?= $key ?>" required>
+								<?php foreach ($dataToView["dataRel1"] as $rel1) { ?>
+									<option value="<?= $rel1["id"] ?>" <?= $rel1["id"] == $$key ? "selected" : "" ?>>
+										<?= $rel1["apellido"] ?>, <?= $rel1["nombre"] ?>
+									</option>
+								<?php } ?>
+							</select>
+						<?php
+					} else if ($key == "fecha") {
+						?><div class="col-md-3 mb-2">
+								<label class="form-label"><?= $encabezado ?></label>
+								<input type="datetime" name="<?= $key ?>" value="<?= $$key ?>" />
+							<?php
+						} else if ($key == "total") {
+				?><div class="col-md-2 mb-1">
+						<label class="form-label"><?= $encabezado ?></label>
+						<input type="hidden" name="<?= $key ?>" value="<?= $$key ?>" />
+					<?php
+					echo $$key;
+				} else {
+					?><div class="col-md-1 mb-1">
+							<label class="form-label"><?= $encabezado ?></label>
+							<input type="hidden" name="<?= $key ?>" value="<?= $$key ?>" />
+						<?php
+						echo $$key;
+					}
+						?>
+						</div>
+					<?php
+				}
+					?><div class="col-md-3 mb-2"><input type="submit" value="Guardar" class="btn btn-primary" />
+						<a class="btn btn-primary" href="index.php?controller=<?= $_GET["controller"] ?>&action=list">Cancelar</a>
+					</div>
+					</div>
+		</form>
+	</fieldset>
+	<?php
+	$_GET["controller"] = "venta_detalle";
+	$controller_path = 'controller/' . $_GET["controller"] . '.php';
+	require_once $controller_path;
+	$controllerName = $_GET["controller"] . 'Controller';
+	$controller = new $controllerName();
+	$campos = $controller->getCampos();
+	$dataToView["data"] = $controller->list($id);
+	require_once "listar.php";
+	?>
+	<a href="index.php?controller=<?= $_GET["controller"] ?>&action=edit&id=0&id_venta=<?= $id_venta ?>"
+		class="btn btn-outline-primary">➕Nuevo Detalle de Venta</a>
 </div>

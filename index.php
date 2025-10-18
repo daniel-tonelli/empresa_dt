@@ -33,5 +33,4 @@
         require_once 'view/template/header.php';
         require_once 'view/' . $controller->view . '.php';
         require_once 'view/template/footer.php';
-
         ?>
