@@ -115,7 +115,11 @@ class Producto {
 		$this->getConection();
 		$sql = "DELETE FROM ".$this->tabla. " WHERE id = ?";
 		$stmt = $this->conection->prepare($sql);
-		return $stmt->execute([$id]);
+		try {
+			return $stmt->execute([$id]);
+		} catch (Exception $e) {
+			return "Error al borrar: Seguramente el producto tiene ventas asociadas. " . $e->getMessage();
+		}
 	}
 
 	public function getCampos(){

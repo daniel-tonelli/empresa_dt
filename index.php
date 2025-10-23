@@ -15,7 +15,7 @@
         $controller = new $controllerName();
 
         /* Check if method is defined */
-
+        $error="";
         $dataToView["data"] = array();
         $dataToView["dataRel1"] = array();
         if (method_exists($controller, $_GET["action"])) {

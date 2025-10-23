@@ -115,11 +115,16 @@ class Cliente {
 	}
 
 	/* Delete by id */
-	public function deleteTablaById($id){
+	public function deleteTablaById($id) {
 		$this->getConection();
 		$sql = "DELETE FROM ".$this->tabla. " WHERE id = ?";
 		$stmt = $this->conection->prepare($sql);
-		return $stmt->execute([$id]);
+		try {
+			return $stmt->execute([$id]);
+		}
+		catch (Exception $e) {
+			return "Error al borrar: Seguramente el cliente tiene ventas asociadas. " . $e->getMessage();
+		}
 	}
 
 	public function getCampos(){
