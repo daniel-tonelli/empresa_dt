@@ -38,7 +38,12 @@ class Producto {
 	public function getTablaById($id){
 		if(is_null($id)) return false;
 		$this->getConection();
-		$sql = "SELECT * FROM ".$this->tabla. " WHERE id = ?";
+		$sql = "SELECT a.*, b.id_producto, count(*) cant_ventas
+		 FROM ".$this->tabla. " a
+		 LEFT JOIN ventas_detalle b
+		 ON a.id=b.id_producto
+		 WHERE a.id = ?
+		 GROUP BY 1,2,3,4,5";
 		$stmt = $this->conection->prepare($sql);
 		$stmt->bind_param('i', $id); // 'i' para entero
 		$stmt->execute();

@@ -46,7 +46,7 @@ class ProductoController{
 	/* Confirm to delete */
 	public function confirmDelete(){
 		$this->page_title = 'Eliminar '. $this->tabla;
-		$this->view = 'confirm_delete';
+		$this->view = 'confirm_delete_productos';
 		return $this->tablaObj->getTablaById($_GET["id"]);
 	}
 

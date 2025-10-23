@@ -3,6 +3,11 @@
 require_once 'model/cliente.php';
 
 class ClienteController{
+	/**
+	 * Undocumented variable
+	 *
+	 * @var Cliente $tablaObj
+	 */
 	public $page_title;
 	public $view;
 	public $tablaObj;
@@ -20,7 +25,12 @@ class ClienteController{
 		return $this->tablaObj->getTabla();
 	}
 
-	/* trae para editar */
+	/**
+	 * Editar datos de la tabla
+	 *
+	 * @param int $id
+	 * @return void
+	 */
 	public function edit($id=null){
 		$this->page_title = 'Editar '. $this->tabla;
 		$this->view = 'edit_'. $this->tabla;
@@ -43,10 +53,14 @@ class ClienteController{
 		return $result;
 	}
 
-	/* Confirm to delete */
+	/**
+	 * Confirmar la eliminación
+	 *
+	 * @return void
+	 */
 	public function confirmDelete(){
 		$this->page_title = 'Eliminar '. $this->tabla;
-		$this->view = 'confirm_delete';
+		$this->view = 'confirm_delete_clientes';
 		return $this->tablaObj->getTablaById($_GET["id"]);
 	}
 
