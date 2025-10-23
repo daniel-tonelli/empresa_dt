@@ -20,7 +20,11 @@ class Venta_detalleController{
 	/* Lista */
 	public function list($id){
 		$this->page_title = 'Listado de '. $this->tabla;
-		return $this->tablaObj->getTabla($id);
+		$data=[];
+		if ($id>0) {
+			$data=$this->tablaObj->getTabla($id);
+		}
+		return $data;
 	}
 
 	/* trae para editar */

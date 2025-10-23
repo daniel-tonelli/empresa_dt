@@ -32,6 +32,9 @@ foreach ($campos as $key => $encabezado) {
 							</select>
 						<?php
 					} else if ($key == "fecha") {
+						if ($$key=="") {
+							$$key = date("Y-m-d H:m:s");
+						}
 						?><div class="col-md-3 mb-2">
 								<label class="form-label"><?= $encabezado ?></label>
 								<input type="datetime" name="<?= $key ?>" value="<?= $$key ?>" />

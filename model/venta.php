@@ -113,8 +113,13 @@ class Venta {
 
 	}
 
-	/* Delete by id */
-	public function deleteTablaById($id){
+	/**
+	 * Borrar por ID
+	 *
+	 * @param int $id
+	 * @return boolean
+	 */
+	public function deleteTablaById(int $id){
 		$this->getConection();
 		$sql = "DELETE FROM ".$this->tabla. " WHERE id = ?";
 		$stmt = $this->conection->prepare($sql);
