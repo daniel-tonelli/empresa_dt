@@ -71,7 +71,11 @@ foreach ($campos as $key => $encabezado) {
 	$campos = $controller->getCampos();
 	$dataToView["data"] = $controller->list($id);
 	require_once "listar.php";
+	if (isset($id_venta) && $id_venta!="") {
 	?>
 	<a href="index.php?controller=<?= $_GET["controller"] ?>&action=edit&id=0&id_venta=<?= $id_venta ?>"
 		class="btn btn-outline-primary">➕Nuevo Detalle de Venta</a>
+	<?php
+	}
+	?>
 </div>
