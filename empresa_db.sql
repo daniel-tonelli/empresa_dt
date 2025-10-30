@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-10-2025 a las 20:11:21
+-- Tiempo de generación: 30-10-2025 a las 18:28:04
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -50,10 +50,10 @@ INSERT INTO `clientes` (`id`, `nombre`, `apellido`, `empresa`, `domicilio`, `ciu
 (4, 'Ana', 'Martínez', 'Creative Minds', 'Plaza de la Tecnología 101', 'Ciudad Star', 'EE.UU.', '+1-555-3456', 'ana.martinez@creativeminds.com'),
 (5, 'Luis', 'Hernández', 'Secure Systems', 'Calle de la Seguridad 212', 'Central City', 'EE.UU.', '+1-555-7890', 'luis.hernandez@securesystems.com'),
 (6, 'Laura', 'López', 'Dynamic Web', 'Avenida del Código 313', 'Coast City', 'EE.UU.', '+1-555-2345', 'laura.lopez@dynamicweb.com'),
-(7, 'Javier', 'Gómez', 'Alpha Industries', 'Calle de la Industria 414', 'Starling City', 'EE.UU.', '+1-555-6789', 'javier.gomez@alphaindustries.com'),
 (8, 'Sofía', 'Díaz', 'Omega Services', 'Avenida de los Servicios 515', 'National City', 'EE.UU.', '+1-555-1235', 'sofia.diaz@omegaservices.com'),
 (9, 'Diego', 'Sánchez', 'Beta Logistics', 'Calle de la Logística 616', 'Fawcett City', 'EE.UU.', '+1-555-5679', 'diego.sanchez@betalogistics.com'),
-(10, 'Elena', 'Torres', 'Gamma Solutions', 'Boulevard de las Soluciones 717', 'Keystone City', 'EE.UU.', '+1-555-9013', 'elena.torres@gammasolutions.com');
+(10, 'Elena', 'Torres', 'Gamma Solutions', 'Boulevard de las Soluciones 717', 'Keystone City', 'EE.UU.', '+1-555-9013', 'elena.torres@gammasolutions.com'),
+(11, 'Carlos Daniel', 'Tonelli', 'CENS 451', 'Las Martinetas 222', 'Faro', 'Argentina', '02914328750', 'd_tonelli@yahoo.com');
 
 -- --------------------------------------------------------
 
@@ -82,6 +82,56 @@ INSERT INTO `productos` (`id`, `nombre`, `precio`, `stock`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `proveedores`
+--
+-- Error leyendo la estructura de la tabla empresa_db.proveedores: #1030 - Error 194 &quot;Tablespace is missing for a table&quot; desde el manejador de la tabla InnoDB
+-- Error leyendo datos de la tabla empresa_db.proveedores: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `empresa_db`.`proveedores`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL,
+  `rol` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `roles`
+--
+
+INSERT INTO `roles` (`id`, `rol`) VALUES
+(1, 'Administrador'),
+(9, 'Editor');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `id` int(11) NOT NULL,
+  `usuario` varchar(50) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `apellido` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` char(255) NOT NULL,
+  `id_rol` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `apellido`, `email`, `password`, `id_rol`) VALUES
+(1, 'dtonelli', 'Carlos Daniel', 'Tonelli', 'd_tonelli@yahoo.com', '$2y$10$4Et/do.k45HfLeoqkekT2eeQSv2fqUUpv98hYnTI1OHgyHcMOgICC', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `ventas`
 --
 
@@ -97,8 +147,8 @@ CREATE TABLE `ventas` (
 --
 
 INSERT INTO `ventas` (`id`, `id_cliente`, `fecha`, `total`) VALUES
-(1, 1, '2025-10-07 14:02:14', 1074.99),
-(2, 2, '2025-10-07 14:02:14', 576.00);
+(2, 2, '2025-10-07 14:02:14', 1826.49),
+(3, 1, '2025-10-23 23:10:15', 1999.98);
 
 -- --------------------------------------------------------
 
@@ -120,10 +170,10 @@ CREATE TABLE `ventas_detalle` (
 --
 
 INSERT INTO `ventas_detalle` (`id`, `id_venta`, `id_producto`, `cantidad`, `precio_unitario`) VALUES
-(1, 1, 1, 1, 999.99),
-(2, 1, 2, 3, 25.00),
-(3, 2, 3, 2, 250.50),
-(4, 2, 4, 1, 75.00);
+(3, 2, 3, 3, 250.50),
+(4, 2, 4, 1, 75.00),
+(17, 2, 1, 1, 999.99),
+(21, 3, 1, 2, 999.99);
 
 --
 -- Índices para tablas volcadas
@@ -141,6 +191,21 @@ ALTER TABLE `clientes`
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `nombre` (`nombre`);
+
+--
+-- Indices de la tabla `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `rol` (`rol`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `usuario` (`usuario`),
+  ADD KEY `fk_rol` (`id_rol`);
 
 --
 -- Indices de la tabla `ventas`
@@ -174,6 +239,18 @@ ALTER TABLE `productos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT de la tabla `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
@@ -183,11 +260,17 @@ ALTER TABLE `ventas`
 -- AUTO_INCREMENT de la tabla `ventas_detalle`
 --
 ALTER TABLE `ventas_detalle`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD CONSTRAINT `fk_rol` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id`);
 
 --
 -- Filtros para la tabla `ventas`

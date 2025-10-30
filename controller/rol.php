@@ -1,18 +1,22 @@
 <?php
 
-require_once 'model/cliente.php';
+require_once 'model/rol.php';
 
-class ClienteController{
-
+class RolController{
+	/**
+	 * Undocumented variable
+	 *
+	 * @var Rol $tablaObj
+	 */
 	public $page_title;
 	public $view;
 	public $tablaObj;
-	private $tabla="clientes";
+	private $tabla="roles";
 
 	public function __construct() {
 		$this->view = 'listar';
 		$this->page_title = '';
-		$this->tablaObj = new Cliente();
+		$this->tablaObj = new Rol();
 	}
 
 	/* Lista */

@@ -21,7 +21,7 @@
         if (method_exists($controller, $_GET["action"])) {
                 $dataToView["data"] = $controller->{$_GET["action"]}();
                 $campos = $controller->getCampos();
-                if ($_GET["controller"] == "venta" || $_GET["controller"] == "venta_detalle") {
+                if ($_GET["controller"] == "venta" || $_GET["controller"] == "venta_detalle" || $_GET["controller"] == "usuario") {
                         if ($_GET["action"]!=="list") {
                                 $dataToView["dataRel1"] = $controller->getTablaRel1();
                         }

@@ -3,7 +3,7 @@
 			<tr>
 				<?php
 				foreach ($campos as $key => $encabezado) {
-					if ($encabezado !== "" && $encabezado !== "ID") {
+					if ($encabezado !== "" && $encabezado !== "ID" && $encabezado !== "Contraseña") {
 						echo "<th>" . $encabezado . "</th>";
 					}
 				}
@@ -16,12 +16,14 @@
 				<tr>
 					<?php
 					foreach ($campos as $key => $encabezado) {
-						if ($encabezado !== "" && $encabezado !== "ID") {
+						if ($encabezado !== "" && $encabezado !== "ID" && $encabezado !== "Contraseña") {
 							echo "<td>";
 							if ($key == "id_cliente") {
 								echo "(" . $tabla[$key] . ") " . $tabla["apellido"] . ", " . $tabla["nombre"];
 							} else if ($key == "id_producto") {
 								echo "(" . $tabla[$key] . ") " . $tabla["nombre"];
+							} else if ($key == "id_rol") {
+								echo "(" . $tabla[$key] . ") " . $tabla["rol"];
 							} else {
 								echo $tabla[$key];
 							}

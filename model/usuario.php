@@ -2,23 +2,21 @@
 
 require_once 'model/db.php';
 
-class Cliente {
+class Usuario {
 
-	private $tabla = 'clientes';
+	private $tabla = 'usuarios';
 	private $conection;
 	private $campos;
 
 	public function __construct() {
 		$this->campos= [
 			"id"=>"ID",
+			"usuario" => "Usuario",
 			"nombre" => "Nombre",
 			"apellido" => "Apellido",
-			"empresa" => "Empresa",
-			"domicilio" => "Domicilio",
-			"ciudad" => "Ciudad",
-			"pais" => "País",
-			"telefono" => "Teléfono",
-			"email" => "Email"
+			"email" => "Correo",
+			"password" => "Contraseña",
+			"id_rol"=>"Rol"
 		];
 	}
 
@@ -31,7 +29,11 @@ class Cliente {
 	/* Get all */
 	public function getTabla(){
 		$this->getConection();
-		$sql = "SELECT * FROM ".$this->tabla;
+		$sql = "SELECT a.*, b.rol 
+		FROM ".$this->tabla. " a
+		INNER JOIN roles b
+		ON a.id_rol=b.id
+		ORDER BY 1";
 		$stmt = $this->conection->prepare($sql);
 		try {
 			$stmt->execute();
@@ -48,12 +50,11 @@ class Cliente {
 	public function getTablaById($id){
 		if(is_null($id)) return false;
 		$this->getConection();
-		$sql = "SELECT a.*, b.id_cliente, count(*) cant_ventas
-		 FROM clientes a 
-		 LEFT JOIN ventas b
-		 ON a.id=b.id_cliente
-		 WHERE a.id =  ?
-         GROUP BY 1,2,3,4,5,6,7,8,9,10";
+		$sql = "SELECT a.*, b.rol
+		 FROM usuarios a
+		 INNER JOIN roles b
+		 ON a.id_rol=b.id
+		 WHERE a.id =  ?";
 		$stmt = $this->conection->prepare($sql);
 		$stmt->bind_param('i', $id); // 'i' para entero
 		$stmt->execute();
@@ -91,6 +92,9 @@ class Cliente {
 				if ($value!=="ID") {
 					if (count($data) > 0) $sql .= ", ";
 					$sql .= $key . " = ?";
+					if ($value == "Contraseña") {
+						$$key=password_hash($$key,PASSWORD_BCRYPT);
+					}
 					$data[] = $$key;
 				}
 				else {
@@ -107,6 +111,9 @@ class Cliente {
 			foreach ($this->campos as $key => $value) {
 				if (count($data) > 0) $sql .= ", ";
 				$sql .= $key;
+				if ($value == "Contraseña") {
+					$$key = password_hash($$key, PASSWORD_BCRYPT);
+				}
 				$data[] = $$key;
 			}
 			$sql .= ") VALUES (";
@@ -133,7 +140,7 @@ class Cliente {
 			return $stmt->execute([$id]);
 		}
 		catch (Exception $e) {
-			return "Error al borrar: Seguramente el cliente tiene ventas asociadas. " . $e->getMessage();
+			return "Error al borrar: " . $e->getMessage();
 		}
 	}
 

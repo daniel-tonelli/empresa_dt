@@ -2,23 +2,16 @@
 
 require_once 'model/db.php';
 
-class Cliente {
+class Rol {
 
-	private $tabla = 'clientes';
+	private $tabla = 'roles';
 	private $conection;
 	private $campos;
 
 	public function __construct() {
 		$this->campos= [
 			"id"=>"ID",
-			"nombre" => "Nombre",
-			"apellido" => "Apellido",
-			"empresa" => "Empresa",
-			"domicilio" => "Domicilio",
-			"ciudad" => "Ciudad",
-			"pais" => "País",
-			"telefono" => "Teléfono",
-			"email" => "Email"
+			"rol" => "Rol"
 		];
 	}
 
@@ -48,12 +41,7 @@ class Cliente {
 	public function getTablaById($id){
 		if(is_null($id)) return false;
 		$this->getConection();
-		$sql = "SELECT a.*, b.id_cliente, count(*) cant_ventas
-		 FROM clientes a 
-		 LEFT JOIN ventas b
-		 ON a.id=b.id_cliente
-		 WHERE a.id =  ?
-         GROUP BY 1,2,3,4,5,6,7,8,9,10";
+		$sql = "SELECT * FROM roles WHERE id =  ?";
 		$stmt = $this->conection->prepare($sql);
 		$stmt->bind_param('i', $id); // 'i' para entero
 		$stmt->execute();
@@ -100,7 +88,11 @@ class Cliente {
 			$data[] = $id;
 			$sql .= " WHERE id = ?";
 			$stmt = $this->conection->prepare($sql);
-			$res = $stmt->execute($data);
+			try {
+				$stmt->execute($data);
+			} catch (Exception $e) {
+				// Error al actualizar: Seguramente este rol ya existe.
+			}
 		}else{
 			$sql = "INSERT INTO ".$this->tabla." (";
 			$data = [];
@@ -116,12 +108,15 @@ class Cliente {
 			}
 			$sql .= ")";
 			$stmt = $this->conection->prepare($sql);
-			$stmt->execute($data);
-			$id = $this->conection->insert_id;
+			try {
+				$stmt->execute($data);
+				$id = $this->conection->insert_id;
+			} catch (Exception $e) {
+				//Error al insertar: Seguramente este rol ya existe.
+				$id=0;
+			}
 		}
-
 		return $id;	
-
 	}
 
 	/* Delete by id */
@@ -133,7 +128,7 @@ class Cliente {
 			return $stmt->execute([$id]);
 		}
 		catch (Exception $e) {
-			return "Error al borrar: Seguramente el cliente tiene ventas asociadas. " . $e->getMessage();
+			return "Error al borrar: Seguramente el rol tiene usuarios asociados. " . $e->getMessage();
 		}
 	}
 
