@@ -43,6 +43,19 @@ class UsuarioController
 		return $this->tablaObj->getTablaById($id);
 	}
 
+	/* ingresar */
+	public function login()
+	{
+		$this->page_title = 'Ingresar ' . $this->tabla;
+		$this->view = 'login';
+		$data = $this->tablaObj->login($_POST);
+		if (isset($data["password"]) && password_verify($_POST["password"], $data['password'])) {
+			return $data;
+		} else {
+			return false;
+		}
+	}
+
 	/* Create or update */
 	public function save()
 	{

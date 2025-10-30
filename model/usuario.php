@@ -62,6 +62,22 @@ class Usuario {
 		return $resultado->fetch_assoc();
 	}
 
+	/* Get by usuario */
+	public function login($param)
+	{
+		$this->getConection();
+		$sql = "SELECT a.*, b.rol
+		 FROM usuarios a
+		 INNER JOIN roles b
+		 ON a.id_rol=b.id
+		 WHERE a.usuario =  ?";
+		$stmt = $this->conection->prepare($sql);
+		$stmt->bind_param('s', $param["usuario"]);
+		$stmt->execute();
+		$resultado = $stmt->get_result();
+		return $resultado->fetch_assoc();
+	}
+
 	/* Save */
 	public function save($param){
 		$this->getConection();

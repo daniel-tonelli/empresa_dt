@@ -1,6 +1,15 @@
         <?php
+        session_start();
+        $rolID=0;
         require_once 'config/config.php';
-
+        if (isset($_SESSION["rolID"])){
+                $rolID = $_SESSION["rolID"];
+        }
+        if ($rolID==0) {
+                $_GET["controller"]="usuario";
+                $_GET["action"]="login";
+                $controllers = [];
+        }
         if (!isset($_GET["controller"])) $_GET["controller"] = constant("DEFAULT_CONTROLLER");
         if (!isset($_GET["action"])) $_GET["action"] = constant("DEFAULT_ACTION");
 

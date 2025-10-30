@@ -13,7 +13,7 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <h3>Gestión de <?= $_GET["controller"] ?>s</h3>
+                <h3>Gestión de <?= $_GET["controller"].($_GET["controller"]=="rol"?"e":"") ?>s</h3>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item mx-3">
@@ -23,25 +23,32 @@
                             <?php } else if ($_GET["controller"] !== "venta_detalle") {
                             ?> <a href="index.php?controller=<?= $_GET["controller"] ?>&action=list"
                                     class="btn btn-outline-primary">volver</a>
-                                <?php
+                            <?php
                             }
                             foreach ($controllers as $txtBoton) {
-                                if ($_GET["controller"] != $txtBoton) {
-                                ?>
+                            ?>
                         </li>
                         <li class="nav-item mx-3">
                             <a href="index.php?controller=<?= $txtBoton ?>&action=list"
-                                class="btn btn-outline-primary"><?= $txtBoton ?>s</a>
+                                class="btn btn-outline-primary"><?= $txtBoton.($txtBoton=="rol"?"e":"") ?>s</a>
                         <?php
-                                } else {
+                            }
                         ?>
                         </li>
                         <li class="nav-item mx-3">
-                            <a class="btn btn-outline-primary"><?= $txtBoton ?>s</a>
-                    <?php
-                                }
+                            <?php
+                            if (isset($_SESSION["usuario"])) {
+                            ?>
+                                <a href="index.php?controller=usuario&action=login&logout=true"
+                                    title="cerrar sesión" class="btn btn-danger"><?= $_SESSION["usuario"] ?></a>
+                            <?php
+                            } else {
+                            ?>
+                                <a href="index.php?controller=usuario&action=login"
+                                    class="btn btn-outline-primary">ingresar</a>
+                            <?php
                             }
-                    ?>
+                            ?>
                         </li>
                     </ul>
                 </div>
