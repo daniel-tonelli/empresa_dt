@@ -4,7 +4,6 @@
 	if (isset($_POST["usuario"])) {
 		$usuario = $_POST["usuario"];
 		if ($dataToView["data"]) {
-			session_start();
 			$_SESSION["usuarioID"] = $dataToView["data"]["id"];
 			$_SESSION["usuario"] = $dataToView["data"]["usuario"];
 			$_SESSION["rolID"] = $dataToView["data"]["id_rol"];

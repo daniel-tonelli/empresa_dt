@@ -60,7 +60,7 @@ class RolController{
 	 */
 	public function confirmDelete(){
 		$this->page_title = 'Eliminar '. $this->tabla;
-		$this->view = 'confirm_delete_clientes';
+		$this->view = 'confirm_delete';
 		return $this->tablaObj->getTablaById($_GET["id"]);
 	}
 
